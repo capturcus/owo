@@ -1,9 +1,9 @@
 package main
 
 import (
-	"fmt"
 	"io/ioutil"
 	"os"
+	"owo/grammar"
 	"strings"
 
 	"github.com/alecthomas/participle"
@@ -31,26 +31,6 @@ var iniLexer = lexer.Unquote(lexer.Must(lexer.Regexp(
 		`|(?P<Punct>[][=])`,
 )))
 
-type INI struct {
-	Properties []*Property `{ @@ }`
-	Sections   []*Section  `{ @@ Newline }`
-}
-
-type Section struct {
-	Identifier string      `"[" @Ident "]" Newline`
-	Properties []*Property `Indent { @@ Newline } Dedent`
-}
-
-type Property struct {
-	Key   string `@Ident "="`
-	Value *Value `@@`
-}
-
-type Value struct {
-	String *string  `  @String`
-	Number *float64 `| @Float`
-}
-
 func countTabs(line string) int {
 	for i, char := range line {
 		if char != '\t' {
@@ -67,12 +47,10 @@ func dentSource(source string) (string, error) {
 	for _, line := range lines {
 		lineTabs := countTabs(line)
 		if lineTabs > numTabs {
-			fmt.Println("INDENT")
 			numTabs = lineTabs
 			line = string(INDENT) + line
 		}
 		if lineTabs < numTabs {
-			fmt.Println("DEDENT")
 			numTabs = lineTabs
 			line = line + string(DEDENT)
 		}
@@ -91,11 +69,11 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	parser, err := participle.Build(&INI{}, iniLexer)
+	parser, err := participle.Build(&grammar.INI{}, iniLexer)
 	if err != nil {
 		panic(err)
 	}
-	ini := &INI{}
+	ini := &grammar.INI{}
 	err = parser.Parse(strings.NewReader(dentedSource), ini)
 	if err != nil {
 		panic("PARSING ERROR" + err.Error())
