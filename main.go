@@ -24,6 +24,9 @@ var iniLexer = lexer.Unquote(lexer.Must(lexer.Regexp(
 		`|(?P<Indent>\x11)` +
 		`|(?P<Dedent>\x10)` +
 		`|(?P<Newline>\n)` +
+		`|(?P<Colon>:)` +
+		`|(?P<Comma>,)` +
+		`|(?P<Spaces>[ ]+)` +
 		`|(^[#;].*$)` +
 		`|(?P<Ident>[a-zA-Z][a-zA-Z_\d]*)` +
 		`|(?P<String>"(?:\\.|[^"])*")` +
@@ -69,11 +72,11 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	parser, err := participle.Build(&grammar.INI{}, iniLexer)
+	parser, err := participle.Build(&grammar.Program{}, iniLexer)
 	if err != nil {
 		panic(err)
 	}
-	ini := &grammar.INI{}
+	ini := &grammar.Program{}
 	err = parser.Parse(strings.NewReader(dentedSource), ini)
 	if err != nil {
 		panic("PARSING ERROR" + err.Error())
