@@ -1,0 +1,30 @@
+data Result a = Ok a | Error string
+
+LogError cl CurrentLine, nl NextLine:
+    match cl:
+        - Ok x: nl x
+        - Error e: Error (Log e)
+
+@LogError
+getMetadata r Request:
+    idS = getVar r "id"!
+    id = atoi idS!
+    meta = getMeta id
+    return Ok meta
+
+@LogError
+checkIks x []string:
+    if x.size() == 0:
+        return Error "x empty"
+    return Ok x[0] == "building a"
+
+@LogError
+postName r Request:
+    name = getVar r "name"!
+    var res
+    if !name.startsWith("M"):
+        res = sqlStore name!
+    else:
+        return Error "name doesn't start with M"
+    res = filter (x => checkIks x!) res!
+    return Ok res
