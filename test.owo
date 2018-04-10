@@ -1,16 +1,10 @@
+@siemka
 func2 c d, e f:
-	asd
-	pass
-	dsa
-	loop:
-		qwert!
-	asd!
-	loop:
-		break
-		lol
-	asd
-	loop:
-		asd
-		loop:
-			dsa
+	a, b = c, d!
+	e = s
+
+func1 a b:
 	a
+	a = bsad!
+	loop:
+		czesc = a

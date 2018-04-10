@@ -154,6 +154,7 @@ type capture struct {
 }
 
 func (r *capture) String() string {
+	// return "capture"
 	return r.field.Name + ":" + r.node.String()
 }
 

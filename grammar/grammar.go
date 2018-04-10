@@ -9,6 +9,7 @@ const LEXER_STRING = `(?m)` +
 	`|(?P<Comma>,)` +
 	`|(?P<ExclamMark>!)` +
 	`|(?P<Loop>loop)` +
+	`|(?P<At>@)` +
 	`|(^[#;].*$)` +
 	`|(?P<Ident>[a-zA-Z][a-zA-Z_\d]*)` +
 	`|(?P<String>"(?:\\.|[^"])*")` +
@@ -20,6 +21,18 @@ type Program struct {
 }
 
 type Function struct {
+	Annotated *AnnotatedFunction `@@`
+	Bare      *BareFunction      `| @@`
+}
+
+type AnnotatedFunction struct {
+	Decorator  string     `At @Ident Newline`
+	Identifier string     `@Ident`
+	Args       []*FuncArg `[ @@ { Comma @@ } ] Colon Newline`
+	Block      *Block     `@@`
+}
+
+type BareFunction struct {
 	Identifier string     `@Ident`
 	Args       []*FuncArg `[ @@ { Comma @@ } ] Colon Newline`
 	Block      *Block     `@@`
@@ -41,9 +54,19 @@ type Stmt struct {
 }
 
 type SimpleStmt struct {
-	Pass bool      `@'pass'`
-	Flow *FlowStmt `| @@`
-	Expr *ExprStmt `| @@`
+	Pass   bool        `@'pass'`
+	Assign *AssignStmt `| @@`
+	Flow   *FlowStmt   `| @@`
+	Expr   *ExprStmt   `| @@`
+}
+
+type AssignStmt struct {
+	Locations []*Location `@@ { Comma @@ } '='`
+	Exprs     []*Expr     `@@ { Comma @@ } `
+}
+
+type Location struct {
+	Var string `@Ident`
 }
 
 type ExprStmt struct {
@@ -65,20 +88,10 @@ type LoopStmt struct {
 }
 
 type Expr struct {
-	Test string `@Ident`
+	Variable string `@Ident`
 }
 
 /*
-type Section struct {
-	Identifier string      `"[" @Ident "]" Newline`
-	Properties []*Property `Indent { @@ Newline } Dedent`
-}
-
-type Property struct {
-	Key   string `@Ident "="`
-	Value *Value `@@`
-}
-
 type Value struct {
 	String *string  `  @String`
 	Number *float64 `| @Float`
