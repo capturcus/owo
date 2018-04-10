@@ -3,8 +3,8 @@ func2 c d, e f:
 	pass
 	dsa
 	loop:
-		qwert
-	asd
+		qwert!
+	asd!
 	loop:
 		break
 		lol

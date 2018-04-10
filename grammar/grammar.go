@@ -37,6 +37,7 @@ type FuncArg struct {
 type Stmt struct {
 	Compound *CompoundStmt `@@`
 	Simple   *SimpleStmt   `| @@`
+	Exclam   bool          `[ @ExclamMark ]`
 }
 
 type SimpleStmt struct {
