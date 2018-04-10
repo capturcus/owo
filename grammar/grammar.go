@@ -5,18 +5,18 @@ type Program struct {
 }
 
 type Function struct {
-	Identifier string     `@Ident Spaces`
-	Args       []*FuncArg `{ @@ } Colon Newline `
+	Identifier string     `@Ident`
+	Args       []*FuncArg `[ @@ { Comma @@ } ] Colon`
 	Block      *Block     `@@`
 }
 
 type Block struct {
-	Statements []*Statement `Indent { @@ Newline } Dedent`
+	Statements []*Statement `Indent { @@ } Dedent`
 }
 
 type FuncArg struct {
-	ArgName string `@Ident Spaces`
-	Type    string `@Ident Spaces Comma`
+	ArgName string `@Ident`
+	Type    string `@Ident`
 }
 
 type Statement struct {

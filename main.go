@@ -20,13 +20,11 @@ const (
 // as use of the Unquote filter, which unquotes string tokens.
 var iniLexer = lexer.Unquote(lexer.Must(lexer.Regexp(
 	`(?m)` +
-		`(\t+)` +
+		`(\s+)` +
 		`|(?P<Indent>\x11)` +
 		`|(?P<Dedent>\x10)` +
-		`|(?P<Newline>\n)` +
 		`|(?P<Colon>:)` +
 		`|(?P<Comma>,)` +
-		`|(?P<Spaces>[ ]+)` +
 		`|(^[#;].*$)` +
 		`|(?P<Ident>[a-zA-Z][a-zA-Z_\d]*)` +
 		`|(?P<String>"(?:\\.|[^"])*")` +
