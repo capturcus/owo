@@ -6,9 +6,10 @@ import (
 	"owo/grammar"
 	"strings"
 
-	"github.com/alecthomas/participle"
-	"github.com/alecthomas/participle/lexer"
-	"github.com/alecthomas/repr"
+	"owo/participle"
+	"owo/participle/lexer"
+
+	"owo/repr"
 )
 
 const (
@@ -19,17 +20,7 @@ const (
 // A custom lexer for INI files. This illustrates a relatively complex Regexp lexer, as well
 // as use of the Unquote filter, which unquotes string tokens.
 var iniLexer = lexer.Unquote(lexer.Must(lexer.Regexp(
-	`(?m)` +
-		`(\s+)` +
-		`|(?P<Indent>\x11)` +
-		`|(?P<Dedent>\x10)` +
-		`|(?P<Colon>:)` +
-		`|(?P<Comma>,)` +
-		`|(^[#;].*$)` +
-		`|(?P<Ident>[a-zA-Z][a-zA-Z_\d]*)` +
-		`|(?P<String>"(?:\\.|[^"])*")` +
-		`|(?P<Float>\d+(?:\.\d+)?)` +
-		`|(?P<Punct>[][=])`,
+	grammar.LEXER_STRING,
 )))
 
 func countTabs(line string) int {
@@ -48,12 +39,12 @@ func dentSource(source string) (string, error) {
 	for _, line := range lines {
 		lineTabs := countTabs(line)
 		if lineTabs > numTabs {
+			line = strings.Repeat(string(INDENT), lineTabs-numTabs) + line
 			numTabs = lineTabs
-			line = string(INDENT) + line
 		}
 		if lineTabs < numTabs {
+			line = strings.Repeat(string(DEDENT)+"\n", numTabs-lineTabs) + line
 			numTabs = lineTabs
-			line = line + string(DEDENT)
 		}
 		dentedLines = append(dentedLines, line)
 	}
