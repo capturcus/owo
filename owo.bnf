@@ -1,0 +1,27 @@
+/* Lexical part */
+
+_digit : '0'-'9' ;
+
+_letter : 'a'-'z' | 'A'-'Z' | 'ż' | 'ó' | 'ł' | 'ć' | 'ę' | 'ś' | 'ą' | 'ź' | 'ń' ;
+
+_idchar : _letter | _digit | '_' ;
+
+ident : (_letter | '_') {_idchar} ;
+
+newline :   '\n' | '\n\r' ;
+
+!whitespace : ' ' | '\t' ;
+
+<<
+import "owo/ast"
+import "owo/gocc/token"
+>>
+
+Declarations
+    : Declaration                   << &ast.Declarations{Text: string($0.(*token.Token).Lit)}, nil >>
+    | Declarations Declaration      << &ast.Declarations{Next: $0.(*ast.Declarations), Text: string($1.(*token.Token).Lit)}, nil >>
+    ;
+
+Declaration
+    : ident                         << ast.TestIdent($0) >>
+    ;
