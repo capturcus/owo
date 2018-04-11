@@ -10,6 +10,8 @@ getMetadata r Request:
     idS = getVar r "id"!
     id = atoi idS!
     meta = getMeta id
+    loop:
+        funcCall asd
     return Ok meta
 
 @LogError

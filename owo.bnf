@@ -8,20 +8,55 @@ _idchar : _letter | _digit | '_' ;
 
 ident : (_letter | '_') {_idchar} ;
 
-newline :   '\n' | '\n\r' ;
+newlines :   '\n' {'\n'} | '\n\r' {'\n\r'} ;
+
+at : '@' ;
+colon : ':' ;
+comma : ',' ;
+
+indent : '\x11' ;
+dedent : '\x10' ;
 
 !whitespace : ' ' | '\t' ;
 
 <<
 import "owo/ast"
-import "owo/gocc/token"
+//import "owo/gocc/token"
 >>
 
 Declarations
-    : Declaration                   << &ast.Declarations{Text: string($0.(*token.Token).Lit)}, nil >>
-    | Declarations Declaration      << &ast.Declarations{Next: $0.(*ast.Declarations), Text: string($1.(*token.Token).Lit)}, nil >>
+    : Declaration newlines                              << ast.NewDeclaration($0) >>
+    | Declarations Declaration newlines        << ast.AppendDeclaration($0, $1) >>
     ;
 
 Declaration
-    : ident                         << ast.TestIdent($0) >>
+    : FunctionDeclaration                               << $0, nil >>
+    ;
+
+FunctionDeclaration
+    : at ident newlines BareFunction                    << ast.NewAnnotatedFunction(ast.Str($1), $3) >>
+    | BareFunction                                      << $0, nil >>
+    ;
+
+BareFunction
+    : ident ArgsList colon newlines indent Stmts dedent << ast.NewBareFunction(ast.Str($0), $1, $5) >>
+    ;
+
+ArgsList
+    : Arg                                               << $0, nil >>
+    | ArgsList comma Arg                                << ast.AddArg($0, $2) >>
+    | empty                                             << nil, nil >>
+    ;
+
+Arg
+    : ident ident                                       << &ast.FuncArg{ast.Str($0), ast.Str($1), nil}, nil >>
+    ;
+
+Stmts
+    : Stmt newlines                                      << $0, nil >>
+    | Stmts Stmt newlines                                << ast.AddStmt($0, $1) >>
+    ;
+
+Stmt
+    : ident                                             << ast.TestIdent($0) >>
     ;

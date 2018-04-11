@@ -3,7 +3,7 @@
 package parser
 
 import "owo/ast"
-import "owo/gocc/token"
+//import "owo/gocc/token"
 
 type (
 	//TODO: change type and variable names to be consistent with other tables
@@ -32,30 +32,130 @@ var productionsTable = ProdTab{
 		},
 	},
 	ProdTabEntry{
-		String: `Declarations : Declaration	<< &ast.Declarations{Text: string(X[0].(*token.Token).Lit)}, nil >>`,
+		String: `Declarations : Declaration newlines	<< ast.NewDeclaration(X[0]) >>`,
 		Id:         "Declarations",
 		NTType:     1,
 		Index:      1,
-		NumSymbols: 1,
+		NumSymbols: 2,
 		ReduceFunc: func(X []Attrib) (Attrib, error) {
-			return &ast.Declarations{Text: string(X[0].(*token.Token).Lit)}, nil
+			return ast.NewDeclaration(X[0])
 		},
 	},
 	ProdTabEntry{
-		String: `Declarations : Declarations Declaration	<< &ast.Declarations{Next: X[0].(*ast.Declarations), Text: string(X[1].(*token.Token).Lit)}, nil >>`,
+		String: `Declarations : Declarations Declaration newlines	<< ast.AppendDeclaration(X[0], X[1]) >>`,
 		Id:         "Declarations",
 		NTType:     1,
 		Index:      2,
-		NumSymbols: 2,
+		NumSymbols: 3,
 		ReduceFunc: func(X []Attrib) (Attrib, error) {
-			return &ast.Declarations{Next: X[0].(*ast.Declarations), Text: string(X[1].(*token.Token).Lit)}, nil
+			return ast.AppendDeclaration(X[0], X[1])
 		},
 	},
 	ProdTabEntry{
-		String: `Declaration : ident	<< ast.TestIdent(X[0]) >>`,
+		String: `Declaration : FunctionDeclaration	<< X[0], nil >>`,
 		Id:         "Declaration",
 		NTType:     2,
 		Index:      3,
+		NumSymbols: 1,
+		ReduceFunc: func(X []Attrib) (Attrib, error) {
+			return X[0], nil
+		},
+	},
+	ProdTabEntry{
+		String: `FunctionDeclaration : at ident newlines BareFunction	<< ast.NewAnnotatedFunction(ast.Str(X[1]), X[3]) >>`,
+		Id:         "FunctionDeclaration",
+		NTType:     3,
+		Index:      4,
+		NumSymbols: 4,
+		ReduceFunc: func(X []Attrib) (Attrib, error) {
+			return ast.NewAnnotatedFunction(ast.Str(X[1]), X[3])
+		},
+	},
+	ProdTabEntry{
+		String: `FunctionDeclaration : BareFunction	<< X[0], nil >>`,
+		Id:         "FunctionDeclaration",
+		NTType:     3,
+		Index:      5,
+		NumSymbols: 1,
+		ReduceFunc: func(X []Attrib) (Attrib, error) {
+			return X[0], nil
+		},
+	},
+	ProdTabEntry{
+		String: `BareFunction : ident ArgsList colon newlines indent Stmts dedent	<< ast.NewBareFunction(ast.Str(X[0]), X[1], X[5]) >>`,
+		Id:         "BareFunction",
+		NTType:     4,
+		Index:      6,
+		NumSymbols: 7,
+		ReduceFunc: func(X []Attrib) (Attrib, error) {
+			return ast.NewBareFunction(ast.Str(X[0]), X[1], X[5])
+		},
+	},
+	ProdTabEntry{
+		String: `ArgsList : Arg	<< X[0], nil >>`,
+		Id:         "ArgsList",
+		NTType:     5,
+		Index:      7,
+		NumSymbols: 1,
+		ReduceFunc: func(X []Attrib) (Attrib, error) {
+			return X[0], nil
+		},
+	},
+	ProdTabEntry{
+		String: `ArgsList : ArgsList comma Arg	<< ast.AddArg(X[0], X[2]) >>`,
+		Id:         "ArgsList",
+		NTType:     5,
+		Index:      8,
+		NumSymbols: 3,
+		ReduceFunc: func(X []Attrib) (Attrib, error) {
+			return ast.AddArg(X[0], X[2])
+		},
+	},
+	ProdTabEntry{
+		String: `ArgsList : empty	<< nil, nil >>`,
+		Id:         "ArgsList",
+		NTType:     5,
+		Index:      9,
+		NumSymbols: 0,
+		ReduceFunc: func(X []Attrib) (Attrib, error) {
+			return nil, nil
+		},
+	},
+	ProdTabEntry{
+		String: `Arg : ident ident	<< &ast.FuncArg{ast.Str(X[0]), ast.Str(X[1]), nil}, nil >>`,
+		Id:         "Arg",
+		NTType:     6,
+		Index:      10,
+		NumSymbols: 2,
+		ReduceFunc: func(X []Attrib) (Attrib, error) {
+			return &ast.FuncArg{ast.Str(X[0]), ast.Str(X[1]), nil}, nil
+		},
+	},
+	ProdTabEntry{
+		String: `Stmts : Stmt newlines	<< X[0], nil >>`,
+		Id:         "Stmts",
+		NTType:     7,
+		Index:      11,
+		NumSymbols: 2,
+		ReduceFunc: func(X []Attrib) (Attrib, error) {
+			return X[0], nil
+		},
+	},
+	ProdTabEntry{
+		String: `Stmts : Stmts Stmt newlines	<< ast.AddStmt(X[0], X[1]) >>`,
+		Id:         "Stmts",
+		NTType:     7,
+		Index:      12,
+		NumSymbols: 3,
+		ReduceFunc: func(X []Attrib) (Attrib, error) {
+			return ast.AddStmt(X[0], X[1])
+		},
+	},
+	ProdTabEntry{
+		String: `Stmt : ident	<< ast.TestIdent(X[0]) >>`,
+		Id:         "Stmt",
+		NTType:     8,
+		Index:      13,
 		NumSymbols: 1,
 		ReduceFunc: func(X []Attrib) (Attrib, error) {
 			return ast.TestIdent(X[0])

@@ -2,7 +2,7 @@
 
 package parser
 
-const numNTSymbols = 3
+const numNTSymbols = 9
 
 type (
 	gotoTable [numStates]gotoRow
@@ -14,25 +14,319 @@ var gotoTab = gotoTable{
 		-1, // S'
 		1,  // Declarations
 		2,  // Declaration
+		3,  // FunctionDeclaration
+		6,  // BareFunction
+		-1, // ArgsList
+		-1, // Arg
+		-1, // Stmts
+		-1, // Stmt
 	},
 	gotoRow{ // S1
 		-1, // S'
 		-1, // Declarations
-		4,  // Declaration
+		7,  // Declaration
+		3,  // FunctionDeclaration
+		6,  // BareFunction
+		-1, // ArgsList
+		-1, // Arg
+		-1, // Stmts
+		-1, // Stmt
 	},
 	gotoRow{ // S2
 		-1, // S'
 		-1, // Declarations
 		-1, // Declaration
+		-1, // FunctionDeclaration
+		-1, // BareFunction
+		-1, // ArgsList
+		-1, // Arg
+		-1, // Stmts
+		-1, // Stmt
 	},
 	gotoRow{ // S3
 		-1, // S'
 		-1, // Declarations
 		-1, // Declaration
+		-1, // FunctionDeclaration
+		-1, // BareFunction
+		-1, // ArgsList
+		-1, // Arg
+		-1, // Stmts
+		-1, // Stmt
 	},
 	gotoRow{ // S4
 		-1, // S'
 		-1, // Declarations
 		-1, // Declaration
+		-1, // FunctionDeclaration
+		-1, // BareFunction
+		-1, // ArgsList
+		-1, // Arg
+		-1, // Stmts
+		-1, // Stmt
+	},
+	gotoRow{ // S5
+		-1, // S'
+		-1, // Declarations
+		-1, // Declaration
+		-1, // FunctionDeclaration
+		-1, // BareFunction
+		11, // ArgsList
+		12, // Arg
+		-1, // Stmts
+		-1, // Stmt
+	},
+	gotoRow{ // S6
+		-1, // S'
+		-1, // Declarations
+		-1, // Declaration
+		-1, // FunctionDeclaration
+		-1, // BareFunction
+		-1, // ArgsList
+		-1, // Arg
+		-1, // Stmts
+		-1, // Stmt
+	},
+	gotoRow{ // S7
+		-1, // S'
+		-1, // Declarations
+		-1, // Declaration
+		-1, // FunctionDeclaration
+		-1, // BareFunction
+		-1, // ArgsList
+		-1, // Arg
+		-1, // Stmts
+		-1, // Stmt
+	},
+	gotoRow{ // S8
+		-1, // S'
+		-1, // Declarations
+		-1, // Declaration
+		-1, // FunctionDeclaration
+		-1, // BareFunction
+		-1, // ArgsList
+		-1, // Arg
+		-1, // Stmts
+		-1, // Stmt
+	},
+	gotoRow{ // S9
+		-1, // S'
+		-1, // Declarations
+		-1, // Declaration
+		-1, // FunctionDeclaration
+		-1, // BareFunction
+		-1, // ArgsList
+		-1, // Arg
+		-1, // Stmts
+		-1, // Stmt
+	},
+	gotoRow{ // S10
+		-1, // S'
+		-1, // Declarations
+		-1, // Declaration
+		-1, // FunctionDeclaration
+		-1, // BareFunction
+		-1, // ArgsList
+		-1, // Arg
+		-1, // Stmts
+		-1, // Stmt
+	},
+	gotoRow{ // S11
+		-1, // S'
+		-1, // Declarations
+		-1, // Declaration
+		-1, // FunctionDeclaration
+		-1, // BareFunction
+		-1, // ArgsList
+		-1, // Arg
+		-1, // Stmts
+		-1, // Stmt
+	},
+	gotoRow{ // S12
+		-1, // S'
+		-1, // Declarations
+		-1, // Declaration
+		-1, // FunctionDeclaration
+		-1, // BareFunction
+		-1, // ArgsList
+		-1, // Arg
+		-1, // Stmts
+		-1, // Stmt
+	},
+	gotoRow{ // S13
+		-1, // S'
+		-1, // Declarations
+		-1, // Declaration
+		-1, // FunctionDeclaration
+		-1, // BareFunction
+		-1, // ArgsList
+		-1, // Arg
+		-1, // Stmts
+		-1, // Stmt
+	},
+	gotoRow{ // S14
+		-1, // S'
+		-1, // Declarations
+		-1, // Declaration
+		-1, // FunctionDeclaration
+		18, // BareFunction
+		-1, // ArgsList
+		-1, // Arg
+		-1, // Stmts
+		-1, // Stmt
+	},
+	gotoRow{ // S15
+		-1, // S'
+		-1, // Declarations
+		-1, // Declaration
+		-1, // FunctionDeclaration
+		-1, // BareFunction
+		-1, // ArgsList
+		-1, // Arg
+		-1, // Stmts
+		-1, // Stmt
+	},
+	gotoRow{ // S16
+		-1, // S'
+		-1, // Declarations
+		-1, // Declaration
+		-1, // FunctionDeclaration
+		-1, // BareFunction
+		-1, // ArgsList
+		-1, // Arg
+		-1, // Stmts
+		-1, // Stmt
+	},
+	gotoRow{ // S17
+		-1, // S'
+		-1, // Declarations
+		-1, // Declaration
+		-1, // FunctionDeclaration
+		-1, // BareFunction
+		-1, // ArgsList
+		20, // Arg
+		-1, // Stmts
+		-1, // Stmt
+	},
+	gotoRow{ // S18
+		-1, // S'
+		-1, // Declarations
+		-1, // Declaration
+		-1, // FunctionDeclaration
+		-1, // BareFunction
+		-1, // ArgsList
+		-1, // Arg
+		-1, // Stmts
+		-1, // Stmt
+	},
+	gotoRow{ // S19
+		-1, // S'
+		-1, // Declarations
+		-1, // Declaration
+		-1, // FunctionDeclaration
+		-1, // BareFunction
+		-1, // ArgsList
+		-1, // Arg
+		-1, // Stmts
+		-1, // Stmt
+	},
+	gotoRow{ // S20
+		-1, // S'
+		-1, // Declarations
+		-1, // Declaration
+		-1, // FunctionDeclaration
+		-1, // BareFunction
+		-1, // ArgsList
+		-1, // Arg
+		-1, // Stmts
+		-1, // Stmt
+	},
+	gotoRow{ // S21
+		-1, // S'
+		-1, // Declarations
+		-1, // Declaration
+		-1, // FunctionDeclaration
+		-1, // BareFunction
+		-1, // ArgsList
+		-1, // Arg
+		23, // Stmts
+		24, // Stmt
+	},
+	gotoRow{ // S22
+		-1, // S'
+		-1, // Declarations
+		-1, // Declaration
+		-1, // FunctionDeclaration
+		-1, // BareFunction
+		-1, // ArgsList
+		-1, // Arg
+		-1, // Stmts
+		-1, // Stmt
+	},
+	gotoRow{ // S23
+		-1, // S'
+		-1, // Declarations
+		-1, // Declaration
+		-1, // FunctionDeclaration
+		-1, // BareFunction
+		-1, // ArgsList
+		-1, // Arg
+		-1, // Stmts
+		26, // Stmt
+	},
+	gotoRow{ // S24
+		-1, // S'
+		-1, // Declarations
+		-1, // Declaration
+		-1, // FunctionDeclaration
+		-1, // BareFunction
+		-1, // ArgsList
+		-1, // Arg
+		-1, // Stmts
+		-1, // Stmt
+	},
+	gotoRow{ // S25
+		-1, // S'
+		-1, // Declarations
+		-1, // Declaration
+		-1, // FunctionDeclaration
+		-1, // BareFunction
+		-1, // ArgsList
+		-1, // Arg
+		-1, // Stmts
+		-1, // Stmt
+	},
+	gotoRow{ // S26
+		-1, // S'
+		-1, // Declarations
+		-1, // Declaration
+		-1, // FunctionDeclaration
+		-1, // BareFunction
+		-1, // ArgsList
+		-1, // Arg
+		-1, // Stmts
+		-1, // Stmt
+	},
+	gotoRow{ // S27
+		-1, // S'
+		-1, // Declarations
+		-1, // Declaration
+		-1, // FunctionDeclaration
+		-1, // BareFunction
+		-1, // ArgsList
+		-1, // Arg
+		-1, // Stmts
+		-1, // Stmt
+	},
+	gotoRow{ // S28
+		-1, // S'
+		-1, // Declarations
+		-1, // Declaration
+		-1, // FunctionDeclaration
+		-1, // BareFunction
+		-1, // ArgsList
+		-1, // Arg
+		-1, // Stmts
+		-1, // Stmt
 	},
 }

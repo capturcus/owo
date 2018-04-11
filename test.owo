@@ -1,10 +1,4 @@
-@siemka
-func2 c d, e f:
-	a, b = c, d!
-	e = s
-
-func1 a b:
-	a
-	a = bsad!
-	loop:
-		czesc = a
+func1 a b, c d:
+	aasd
+	asd
+	dsa
